@@ -107,6 +107,12 @@ def pointToWorld(cameraMatrix, rotationMatrix, translationVector, imagePoint):
 
     return worldPoint
 
+def measureDistanceSimple(image, measurePoints):
+    boardColumns, boardRows = chessboardSize
+    ret, corners = cv2.findChessboardCorners(image, (boardColumns,boardRows), None)
+    if ret == True:
+        print(corners)
+
 def measureDistance(image, measurePoints, cameraMatrix, distortionParameter):
     # Get known world points
     boardColumns, boardRows = chessboardSize
@@ -154,8 +160,8 @@ if __name__ == "__main__":
     # Calculate Camera Parameter and undistort image
     # Step 2: Uncomment
     undistortedImage = undistortImage(worldPoints, imagePoints, imageSize, imageToUndistort)
-    #cv2.imshow("Undistorted Image", undistortedImage)
-    #cv2.waitKey(0)
+    cv2.imshow("Undistorted Image", undistortedImage)
+    cv2.waitKey(0)
 
     # Step 4
     # Calculate Re-Projection-Error
@@ -171,4 +177,4 @@ if __name__ == "__main__":
     cv2.setMouseCallback("Measure", getMeasureCoord)
     cv2.waitKey(0)
 
-    print(measureDistance(undistortedImage, measurePoints, cameraMatrix, distCoeff))
+    print(measureDistanceSimple(undistortedImage, measurePoints))
